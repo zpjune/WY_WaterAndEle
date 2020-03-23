@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using com.tqdq.sdk.api;
@@ -20,18 +21,21 @@ namespace WYSD
 {
     public partial class Form1 : Form
     {
+        System.Timers.Timer timer = new System.Timers.Timer();
         public Form1()
         {
             InitializeComponent();
         }
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+ 
         private void button1_Click(object sender, EventArgs e)
         {
             try
             {
-
-                string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
-                int a = SqlHelper.ExcuteNonQuery(sql);
+                this.label1.Text = "任务正在执行中。。。";
+                // startTime();
+               // string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
+               // int a = SqlHelper.ExcuteNonQuery(sql);
                // string res = "{\"Status\": true,\"Message\": null,\"Data\": {\"ID\": \"123\",\"RceiveList\": [{\"GUID\": \"1239999 \",\"Status\": true,\"Message\": null},{\"GUID\": \"1239900 \",\"Status\":true,\"Message\": null}]}}";
                // JavaScriptSerializer Serializer = new JavaScriptSerializer();
                // WaterPayResponseModeL model = Serializer.Deserialize<WaterPayResponseModeL>(res);
@@ -39,7 +43,7 @@ namespace WYSD
             }
             catch (Exception EX)
             {
-               // LHSM.Logs.Log.Logger.Error("定时DoTimer（）出错："+EX.Message);
+               log.Error("button1_Click（）出错：" + EX.Message);
             }
           
 
@@ -86,8 +90,84 @@ namespace WYSD
 
         private void button2_Click(object sender, EventArgs e)
         {
-            log.Debug("调试信息");
-            log.Info("调试信息log.Debug(");
+            stopTime();
         }
-    }
+        #region 定时任务
+
+       
+        private void startTime()
+        {
+            try
+            {
+                //设置执行的时间间隔
+                timer.Interval = 1000;
+
+                //到达时间的时候执行事件
+                timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+
+                //是否是一直执行
+                timer.AutoReset = true;
+
+                //是否执行
+                timer.Enabled = true;
+                log.Error("startTime()=====start===========" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
+            catch (Exception)
+            {
+                timer.Enabled = false;
+                MessageBox.Show("启动失败！");
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 结束执行定时
+        /// </summary>
+        private void stopTime()
+        {
+            log.Info("stopTime(),关闭定时任务。");
+            try
+            {
+                timer.Stop();
+                timer.Elapsed -= new ElapsedEventHandler(timer_Elapsed);
+                timer.Enabled = false;
+                this.label1.Text = "点击开始任务按钮，任务即将开始。。。";
+                log.Info("stopTime()=====end===========" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
+            catch (Exception ex)
+            {
+                log.Error("自动下载关闭失败！" + ex.Message.ToString());
+                return;
+            }
+        }
+        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            string dtNow = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            ConfigManager mg = new ConfigManager();
+            string W_ReadLastDate = Convert.ToDateTime(mg.W_ReadLastDate).AddMinutes(Convert.ToInt32(mg.W_ReadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+            string W_UploadLastDate = Convert.ToDateTime(mg.W_UploadLastDate).AddMinutes(Convert.ToInt32(mg.W_UploadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+            string W_UploadQueryLastDate = Convert.ToDateTime(mg.W_UploadQueryLastDate).AddMinutes(Convert.ToInt32(mg.W_UploadQueryInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+            if (dtNow== W_ReadLastDate) {
+                //执行批量抄表接口服务
+               // WaterService ws = new WaterService();
+               // ws.GetWaterVolume();
+                mg.SetValue("W_ReadLastDate", W_ReadLastDate);
+            }
+            if (dtNow == W_UploadLastDate)
+            {
+                //执行上传充值水表数据
+               //  WaterService ws = new WaterService();
+                 //ws.GetWaterPay();
+                mg.SetValue("W_UploadLastDate", W_ReadLastDate);
+            }
+            if (dtNow == W_UploadQueryLastDate)
+            {
+                //执行查询并更新 上传充值数据是否充值成功
+                //WaterService ws = new WaterService();
+                //ws.GetWaterPayState();
+                mg.SetValue("W_UploadQueryLastDate", W_UploadQueryLastDate);
+            }
+        }
+            #endregion
+        }
 }

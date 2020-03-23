@@ -9,6 +9,7 @@ namespace WYSD
 {
     public class MyTimer
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public delegate void Elapsed(); //定义委托 
         public event Elapsed OnElapsed;
 
@@ -46,7 +47,7 @@ namespace WYSD
             }
             catch (Exception e)
             {
-               // LHSM.Logs.Log.Logger.Info("定时Stop（）出错："+e.Message.ToString());
+               log.Error("定时Stop（）出错："+e.Message.ToString());
             }
         }
 
@@ -71,7 +72,7 @@ namespace WYSD
             }
             catch (Exception e)
             {
-               // LHSM.Logs.Log.Logger.Info("定时DoTimer（）出错：" + e.Message.ToString());
+               log.Error("定时DoTimer（）出错：" + e.Message.ToString());
             }
         }
 

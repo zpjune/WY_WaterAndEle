@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WYSD.Water
+namespace WYSD
 {
     /// <summary>
     /// 查询上传导水接口的充值数据是否正在充值成功 
