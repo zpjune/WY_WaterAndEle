@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Web.Script.Serialization;
@@ -33,7 +34,7 @@ namespace WYSD
             try
             {
                 this.label1.Text = "任务正在执行中。。。";
-                // startTime();
+                startTime();
                 // string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
                 // int a = SqlHelper.ExcuteNonQuery(sql);
                 // string res = "{\"Status\": true,\"Message\": null,\"Data\": {\"ID\": \"123\",\"RceiveList\": [{\"GUID\": \"1239999 \",\"Status\": true,\"Message\": null},{\"GUID\": \"1239900 \",\"Status\":true,\"Message\": null}]}}";
@@ -149,38 +150,50 @@ namespace WYSD
             string dtNow = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             ConfigManager mg = new ConfigManager();
             string W_ReadLastDate = Convert.ToDateTime(mg.W_ReadLastDate).AddMinutes(Convert.ToInt32(mg.W_ReadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
-            string W_UploadLastDate = Convert.ToDateTime(mg.W_UploadLastDate).AddMinutes(Convert.ToInt32(mg.W_UploadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
-            string W_UploadQueryLastDate = Convert.ToDateTime(mg.W_UploadQueryLastDate).AddMinutes(Convert.ToInt32(mg.W_UploadQueryInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+           // string W_UploadLastDate = Convert.ToDateTime(mg.W_UploadLastDate).AddMinutes(Convert.ToInt32(mg.W_UploadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+           // string W_UploadQueryLastDate = Convert.ToDateTime(mg.W_UploadQueryLastDate).AddMinutes(Convert.ToInt32(mg.W_UploadQueryInterval)).ToString("yyyy-MM-dd HH:mm:ss");
             if (dtNow== W_ReadLastDate) {
-                //执行批量抄表接口服务
-               // WaterService ws = new WaterService();
-               // ws.GetWaterVolume();
                 mg.SetValue("W_ReadLastDate", W_ReadLastDate);
                 SetLableText();
+                //执行批量抄表接口服务
+                // WaterService ws = new WaterService();
+                // ws.GetWaterVolume();
+
             }
-            if (dtNow == W_UploadLastDate)
-            {
-                //执行上传充值水表数据
-               //  WaterService ws = new WaterService();
-                 //ws.GetWaterPay();
-                mg.SetValue("W_UploadLastDate", W_ReadLastDate);
-                SetLableText();
-            }
-            if (dtNow == W_UploadQueryLastDate)
-            {
-                //执行查询并更新 上传充值数据是否充值成功
-                //WaterService ws = new WaterService();
-                //ws.GetWaterPayState();
-                mg.SetValue("W_UploadQueryLastDate", W_UploadQueryLastDate);
-                SetLableText();
-            }
+            //if (dtNow == W_UploadLastDate)
+            //{
+            //    mg.SetValue("W_UploadLastDate", W_ReadLastDate);
+            //    SetLableText();
+            //    //执行上传充值水表数据
+            //   //  WaterService ws = new WaterService();
+            //     //ws.GetWaterPay();
+
+            //}
+            //if (dtNow == W_UploadQueryLastDate)
+            //{
+            //    mg.SetValue("W_UploadQueryLastDate", W_UploadQueryLastDate);
+            //    SetLableText();
+            //    //执行查询并更新 上传充值数据是否充值成功
+            //    //WaterService ws = new WaterService();
+            //    //ws.GetWaterPayState();
+
+            //}
         }
         #endregion
         private void SetLableText() {
             ConfigManager md = new ConfigManager();
-            this.lb_w1.Text = md.W_ReadLastDate;
-            this.lb_w2.Text = md.W_UploadLastDate;
-            this.lb_w3.Text = md.W_UploadQueryLastDate;
+            new Thread(() =>
+            {
+                Action action = () =>
+            {
+                this.lb_w1.Text = md.W_ReadLastDate;
+                this.lb_w2.Text = md.W_UploadLastDate;
+                this.lb_w3.Text = md.W_UploadQueryLastDate;
+
+            };
+                Invoke(action);
+
+            }).Start();
         }
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
