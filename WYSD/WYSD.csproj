@@ -33,7 +33,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -124,6 +124,7 @@
   <ItemGroup>
     <Compile Include="Common\ConfigCom.cs" />
     <Compile Include="Common\ConfigManager.cs" />
+    <Compile Include="Common\DateTimeCom.cs" />
     <Compile Include="Common\MyTimer.cs" />
     <Compile Include="Common\RestClient.cs" />
     <Compile Include="Common\SqlHelper.cs" />

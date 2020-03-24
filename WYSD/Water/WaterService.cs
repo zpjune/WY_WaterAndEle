@@ -218,6 +218,7 @@ namespace WYSD
                                     if (SqlHelper.ExcuteNonQuery(sqlUpdate) > 0)
                                     {
                                         log.Info("update查询充值数据是否充值成功GetWaterPayState()返回成功数据,成功！");
+                                        GetWaterVolume();//如果有充值成功得，立即调用批量抄表接口 更新数据
                                     }
                                     else
                                     {

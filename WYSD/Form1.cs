@@ -34,11 +34,13 @@ namespace WYSD
             {
                 this.label1.Text = "任务正在执行中。。。";
                 // startTime();
-               // string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
-               // int a = SqlHelper.ExcuteNonQuery(sql);
-               // string res = "{\"Status\": true,\"Message\": null,\"Data\": {\"ID\": \"123\",\"RceiveList\": [{\"GUID\": \"1239999 \",\"Status\": true,\"Message\": null},{\"GUID\": \"1239900 \",\"Status\":true,\"Message\": null}]}}";
-               // JavaScriptSerializer Serializer = new JavaScriptSerializer();
-               // WaterPayResponseModeL model = Serializer.Deserialize<WaterPayResponseModeL>(res);
+                // string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
+                // int a = SqlHelper.ExcuteNonQuery(sql);
+                // string res = "{\"Status\": true,\"Message\": null,\"Data\": {\"ID\": \"123\",\"RceiveList\": [{\"GUID\": \"1239999 \",\"Status\": true,\"Message\": null},{\"GUID\": \"1239900 \",\"Status\":true,\"Message\": null}]}}";
+                // JavaScriptSerializer Serializer = new JavaScriptSerializer();
+                // WaterPayResponseModeL model = Serializer.Deserialize<WaterPayResponseModeL>(res);
+                this.button1.Enabled = false;
+                this.button2.Enabled = true;
 
             }
             catch (Exception EX)
@@ -91,6 +93,8 @@ namespace WYSD
         private void button2_Click(object sender, EventArgs e)
         {
             stopTime();
+            this.button1.Enabled = true;
+            this.button2.Enabled = false;
         }
         #region 定时任务
 
@@ -152,6 +156,7 @@ namespace WYSD
                // WaterService ws = new WaterService();
                // ws.GetWaterVolume();
                 mg.SetValue("W_ReadLastDate", W_ReadLastDate);
+                SetLableText();
             }
             if (dtNow == W_UploadLastDate)
             {
@@ -159,6 +164,7 @@ namespace WYSD
                //  WaterService ws = new WaterService();
                  //ws.GetWaterPay();
                 mg.SetValue("W_UploadLastDate", W_ReadLastDate);
+                SetLableText();
             }
             if (dtNow == W_UploadQueryLastDate)
             {
@@ -166,10 +172,16 @@ namespace WYSD
                 //WaterService ws = new WaterService();
                 //ws.GetWaterPayState();
                 mg.SetValue("W_UploadQueryLastDate", W_UploadQueryLastDate);
+                SetLableText();
             }
         }
         #endregion
-
+        private void SetLableText() {
+            ConfigManager md = new ConfigManager();
+            this.lb_w1.Text = md.W_ReadLastDate;
+            this.lb_w2.Text = md.W_UploadLastDate;
+            this.lb_w3.Text = md.W_UploadQueryLastDate;
+        }
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
@@ -187,6 +199,16 @@ namespace WYSD
                 this.ShowInTaskbar = false; //不显示在系统任务栏 
                 notifyIcon1.Visible = true; //托盘图标可见 
             }
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
