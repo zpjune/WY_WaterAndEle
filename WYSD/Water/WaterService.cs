@@ -276,9 +276,9 @@ namespace WYSD
                 //验证res
 
 
-                ConfigManager mg = new ConfigManager();
-                mg.SetValue("W_ID", res);
-                mg.SetValue("W_TokenExpire", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                ConfigCom.SetValue("W_ID", res);
+                ConfigCom.SetValue("W_TokenExpire", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 return res;
             }
             catch (Exception ex)

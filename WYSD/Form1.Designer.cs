@@ -36,16 +36,16 @@
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.lb_w1 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lb_w3 = new System.Windows.Forms.Label();
             this.lb_w2 = new System.Windows.Forms.Label();
+            this.lb_w1 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -113,34 +113,14 @@
             this.tabPage1.UseVisualStyleBackColor = true;
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
             // 
-            // tabPage2
+            // groupBox2
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(621, 423);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AccessibleDescription = "";
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 34);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(113, 12);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "最新批量抄表时间：";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(20, 74);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(137, 12);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "最新上传充值数据时间：";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.groupBox2.Location = new System.Drawing.Point(26, 188);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(566, 137);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "电接口定时任务";
             // 
             // groupBox1
             // 
@@ -157,44 +137,6 @@
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "水接口定时任务";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(20, 111);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(137, 12);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "最新查询充值数据时间：";
-            this.label4.Click += new System.EventHandler(this.label3_Click);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Location = new System.Drawing.Point(26, 188);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(566, 137);
-            this.groupBox2.TabIndex = 6;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "电接口定时任务";
-            // 
-            // label5
-            // 
-            this.label5.AccessibleDescription = "";
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(202, 34);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(0, 12);
-            this.label5.TabIndex = 3;
-            // 
-            // lb_w1
-            // 
-            this.lb_w1.AccessibleDescription = "";
-            this.lb_w1.AutoSize = true;
-            this.lb_w1.Location = new System.Drawing.Point(202, 34);
-            this.lb_w1.Name = "lb_w1";
-            this.lb_w1.Size = new System.Drawing.Size(119, 12);
-            this.lb_w1.TabIndex = 3;
-            this.lb_w1.Text = "2020-03-02 02:02:02";
             // 
             // lb_w3
             // 
@@ -216,6 +158,64 @@
             this.lb_w2.TabIndex = 3;
             this.lb_w2.Text = "2020-03-02 02:02:02";
             // 
+            // lb_w1
+            // 
+            this.lb_w1.AccessibleDescription = "";
+            this.lb_w1.AutoSize = true;
+            this.lb_w1.Location = new System.Drawing.Point(202, 34);
+            this.lb_w1.Name = "lb_w1";
+            this.lb_w1.Size = new System.Drawing.Size(119, 12);
+            this.lb_w1.TabIndex = 3;
+            this.lb_w1.Text = "2020-03-02 02:02:02";
+            // 
+            // label5
+            // 
+            this.label5.AccessibleDescription = "";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(202, 34);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(0, 12);
+            this.label5.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AccessibleDescription = "";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(20, 34);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(113, 12);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "最新批量抄表时间：";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(20, 111);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(137, 12);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "最新查询充值数据时间：";
+            this.label4.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(20, 74);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(137, 12);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "最新上传充值数据时间：";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(621, 423);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -224,6 +224,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "普丰物业系统定时任务";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

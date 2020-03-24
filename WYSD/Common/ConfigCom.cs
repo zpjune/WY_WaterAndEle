@@ -88,5 +88,21 @@ namespace WYSD
             W_TokenUri= ConfigurationManager.AppSettings["W_TokenUri"].ToString();
             #endregion
         }
+        public static void SetValue(string AppKey, string AppValue)
+        {
+            Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            //根据Key读取<add>元素的Value
+            // string name = config.AppSettings.Settings[AppKey].Value;
+            //写入<add>元素的Value
+            config.AppSettings.Settings[AppKey].Value = AppValue;
+            //增加<add>元素            
+            //config.AppSettings.Settings.Add("url", "http://www.fx163.net");
+            //删除<add>元素
+            //  config.AppSettings.Settings.Remove("name");
+            //一定要记得保存，写不带参数的config.Save()也可以
+            config.Save(ConfigurationSaveMode.Modified);
+            //刷新，否则程序读取的还是之前的值（可能已装入内存）
+            System.Configuration.ConfigurationManager.RefreshSection("appSettings");
+        }
     }
 }

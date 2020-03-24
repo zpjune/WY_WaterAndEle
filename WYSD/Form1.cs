@@ -34,6 +34,7 @@ namespace WYSD
             try
             {
                 this.label1.Text = "任务正在执行中。。。";
+                
                 startTime();
                 // string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
                 // int a = SqlHelper.ExcuteNonQuery(sql);
@@ -115,12 +116,12 @@ namespace WYSD
 
                 //是否执行
                 timer.Enabled = true;
-                log.Error("startTime()=====start===========" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                log.Info("startTime()=====start===========" );
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 timer.Enabled = false;
-                MessageBox.Show("启动失败！");
+                log.Info("startTime()=====start===========" + ex.Message.ToString());
                 return;
             }
         }
@@ -137,11 +138,11 @@ namespace WYSD
                 timer.Elapsed -= new ElapsedEventHandler(timer_Elapsed);
                 timer.Enabled = false;
                 this.label1.Text = "点击开始任务按钮，任务即将开始。。。";
-                log.Info("stopTime()=====end===========" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                log.Info("stopTime()=====end===========");
             }
             catch (Exception ex)
             {
-                log.Error("自动下载关闭失败！" + ex.Message.ToString());
+                log.Error("自动下载关闭报错！" + ex.Message.ToString());
                 return;
             }
         }
@@ -149,9 +150,9 @@ namespace WYSD
         {
             string dtNow = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             ConfigManager mg = new ConfigManager();
-            string W_ReadLastDate = Convert.ToDateTime(mg.W_ReadLastDate).AddMinutes(Convert.ToInt32(mg.W_ReadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
-           // string W_UploadLastDate = Convert.ToDateTime(mg.W_UploadLastDate).AddMinutes(Convert.ToInt32(mg.W_UploadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
-           // string W_UploadQueryLastDate = Convert.ToDateTime(mg.W_UploadQueryLastDate).AddMinutes(Convert.ToInt32(mg.W_UploadQueryInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+            string W_ReadLastDate = Convert.ToDateTime(mg.W_ReadLastDate).AddMinutes(Convert.ToDouble(mg.W_ReadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+            // string W_UploadLastDate = Convert.ToDateTime(mg.W_UploadLastDate).AddMinutes(Convert.ToDouble(mg.W_UploadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+            // string W_UploadQueryLastDate = Convert.ToDateTime(mg.W_UploadQueryLastDate).AddMinutes(Convert.ToDouble(mg.W_UploadQueryInterval)).ToString("yyyy-MM-dd HH:mm:ss");
             if (dtNow== W_ReadLastDate) {
                 mg.SetValue("W_ReadLastDate", W_ReadLastDate);
                 SetLableText();
@@ -181,19 +182,38 @@ namespace WYSD
         }
         #endregion
         private void SetLableText() {
-            ConfigManager md = new ConfigManager();
-            new Thread(() =>
+            try
             {
-                Action action = () =>
+                ConfigManager md = new ConfigManager();
+                new Thread(() =>
+                {
+                    Action action = () =>
+                    {
+                        this.lb_w1.Text = md.W_ReadLastDate;
+                        this.lb_w2.Text = md.W_UploadLastDate;
+                        this.lb_w3.Text = md.W_UploadQueryLastDate;
+
+                    };
+                    Invoke(action);
+
+                }).Start();
+            }
+            catch (Exception ex)
             {
-                this.lb_w1.Text = md.W_ReadLastDate;
-                this.lb_w2.Text = md.W_UploadLastDate;
-                this.lb_w3.Text = md.W_UploadQueryLastDate;
-
-            };
-                Invoke(action);
-
-            }).Start();
+                log.Error("SetLableText()报错："+ex.Message.ToString());
+            }
+        }
+        private void SetAppConfigDate() {
+            try
+            {
+                ConfigCom.SetValue("W_ReadLastDate",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                ConfigCom.SetValue("W_UploadLastDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                ConfigCom.SetValue("W_UploadQueryLastDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
+            catch (Exception ex)
+            {
+                log.Error("SetAppConfigDate()报错：" + ex.Message.ToString());
+            }
         }
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
@@ -222,6 +242,12 @@ namespace WYSD
         private void label3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            SetAppConfigDate();
+            SetLableText();
         }
     }
 }
