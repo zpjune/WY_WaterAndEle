@@ -12,7 +12,6 @@ namespace WYSD
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         JavaScriptSerializer Serializer = new JavaScriptSerializer();
-        private string id = ConfigCom.W_ID;
         private string baseUri = ConfigCom.W_BaseUri;
        
         private static object objUpload = new object();
@@ -24,14 +23,19 @@ namespace WYSD
         {
             try
             {
-                
+
+                ConfigManager cg = new ConfigManager();
+                if (cg.W_ID==""||(cg.W_ID!=""&&!DateTimeCom.BoolDateTime(cg.W_TokenExpire,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")))) {
+                    cg.W_ID = GetToken();
+                    cg.W_TokenExpire = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                }
                     string readUri = ConfigCom.W_ReadUri;
                     RestClient rc = new RestClient(baseUri);
-                    string res = rc.Get(readUri + "/" + id);
+                    string res = rc.Get(readUri + "/" + cg.W_ID);
                     if (!string.IsNullOrWhiteSpace(res))
                     {
                         WaterAmountModleL model = Serializer.Deserialize<WaterAmountModleL>(res);
-                        if (model.ID == ConfigCom.W_ID && model.MeterList != null && model.MeterList.Count > 0)
+                        if (model.ID == cg.W_ID && model.MeterList != null && model.MeterList.Count > 0)
                         {
                             StringBuilder sb = new StringBuilder();
                             sb.AppendLine("insert into wy_w_amount(MeterID,UserID,UserName,UserAddress,MeterType, UserRegistTime, UserState, MeterReadingTime,MeterAccflow, MeterSurflow, MeterPayCount, ValveState,CreateDate)values ");
@@ -93,6 +97,7 @@ namespace WYSD
             {
                 lock (objUpload)
                 {
+                    
                     string Uri = ConfigCom.W_UploadUri;
                     RestClient rc = new RestClient(baseUri);
                     string sqlSelect = "select GUID,MeterID,RechargeVolume,AddAmount,UnitPrice FROM wy_w_pay where CStatus<>1";
@@ -100,7 +105,13 @@ namespace WYSD
                     if (dtSelect != null && dtSelect.Rows.Count > 0)
                     {
                         List<WaterPayInfoModle> payList = TableToListCom.TableToList<WaterPayInfoModle>(dtSelect);
-                        WaterPayInfoModleL payInfo = new WaterPayInfoModleL() { ID = id, PayList = payList };
+                        ConfigManager cg = new ConfigManager();
+                        if (cg.W_ID == "" || (cg.W_ID != "" && !DateTimeCom.BoolDateTime(cg.W_TokenExpire, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))))
+                        {
+                            cg.W_ID = GetToken();
+                            cg.W_TokenExpire = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        }
+                        WaterPayInfoModleL payInfo = new WaterPayInfoModleL() { ID = cg.W_ID, PayList = payList };
                         string questStr = Newtonsoft.Json.JsonConvert.SerializeObject(payInfo);
                         string res = rc.Post(questStr, Uri);
                         if (!string.IsNullOrWhiteSpace(res))
@@ -179,7 +190,13 @@ namespace WYSD
                     if (dtSelect != null && dtSelect.Rows.Count > 0)
                     {
                         List<WaterPayResQuestModel> payList = TableToListCom.TableToList<WaterPayResQuestModel>(dtSelect);
-                        WaterPayResQuestModelL payInfo = new WaterPayResQuestModelL() { ID = id, ResultList = payList };
+                        ConfigManager cg = new ConfigManager();
+                        if (cg.W_ID == "" || (cg.W_ID != "" && !DateTimeCom.BoolDateTime(cg.W_TokenExpire, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))))
+                        {
+                            cg.W_ID = GetToken();
+                            cg.W_TokenExpire = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        }
+                        WaterPayResQuestModelL payInfo = new WaterPayResQuestModelL() { ID = cg.W_ID, ResultList = payList };
                         string questStr = Newtonsoft.Json.JsonConvert.SerializeObject(payInfo);
                         string res = rc.Post(questStr, Uri);
                         if (!string.IsNullOrWhiteSpace(res))
@@ -240,5 +257,35 @@ namespace WYSD
                 log.Error("查询充值数据是否充值成功GetWaterPayState()执行失败！" + ex.Message.ToString());
             }
         }
+        /// <summary>
+        /// 获取token
+        /// </summary>
+        /// <returns></returns>
+
+        public string GetToken() {
+            try
+            {
+                string userName = ConfigCom.W_UserName;
+                string userPass = ConfigCom.W_UserPass;
+                string uri = ConfigCom.W_TokenUri;
+                string encryUserName = "";//加密
+                string encryUserPass = "";//加密
+                RestClient rc = new RestClient(baseUri);
+                string res = rc.Get(uri + "/" + encryUserName + "/" + encryUserPass);
+                //验证res
+
+
+                ConfigManager mg = new ConfigManager();
+                mg.SetValue("W_ID", res);
+                mg.SetValue("W_TokenExpire", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                return res;
+            }
+            catch (Exception ex)
+            {
+                log.Error("GetToken()出错："+ex.Message.ToString());
+                return "false";
+            }
+        }
+       
     }
 }

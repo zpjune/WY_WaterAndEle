@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace WYSD
 {
-   public static class ConfigCom
+    public static class ConfigCom
     {
-        
+
         #region 电接口配置属性
-        
+
         /// <summary>
         /// 电接口 授权码
         /// </summary>
@@ -35,9 +35,22 @@ namespace WYSD
         #endregion
         #region 水接口参数配置
         /// <summary>
-        /// 集成客户编号 id(http://IP:port/api/Account/GetWaterVolume/{id})
+        /// 获取水token  账号
         /// </summary>
-        public static string W_ID { get; set; }
+        public static string W_UserName { get; set; }
+        /// <summary>
+        /// 获取水token  密码
+        /// </summary>
+        public static string W_UserPass { get; set; }
+        /// <summary>
+        /// 获取水接口token地址
+        /// </summary>
+        public static string W_TokenUri { get; set; }
+        /// <summary>
+        /// 过期时间
+        /// </summary>
+
+        public static string W_TokenExpireInterval { get; set; }
         /// <summary>
         /// 水接口ip地址 http://ip+端口
         /// </summary>
@@ -65,11 +78,14 @@ namespace WYSD
             readRemainEle = ConfigurationManager.AppSettings["readRemainEle"].ToString();
             #endregion
             #region 水接口参数
-            W_ID = ConfigurationManager.AppSettings["W_ID"].ToString();
+           
             W_BaseUri = ConfigurationManager.AppSettings["W_BaseUri"].ToString();
             W_ReadUri = ConfigurationManager.AppSettings["W_ReadUri"].ToString();
             W_UploadUri = ConfigurationManager.AppSettings["W_UploadUri"].ToString();
             W_UploadQueryUri = ConfigurationManager.AppSettings["W_UploadQueryUri"].ToString();
+            W_UserName = ConfigurationManager.AppSettings["W_UserName"].ToString();
+            W_UserPass = ConfigurationManager.AppSettings["W_UserPass"].ToString();
+            W_TokenUri= ConfigurationManager.AppSettings["W_TokenUri"].ToString();
             #endregion
         }
     }

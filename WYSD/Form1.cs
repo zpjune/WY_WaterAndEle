@@ -168,6 +168,25 @@ namespace WYSD
                 mg.SetValue("W_UploadQueryLastDate", W_UploadQueryLastDate);
             }
         }
-            #endregion
+        #endregion
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+                this.ShowInTaskbar = true;
+            }
         }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.ShowInTaskbar = false; //不显示在系统任务栏 
+                notifyIcon1.Visible = true; //托盘图标可见 
+            }
+        }
+    }
 }

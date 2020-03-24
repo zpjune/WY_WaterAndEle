@@ -7,21 +7,29 @@ using System.Threading.Tasks;
 
 namespace WYSD
 {
-   public class ConfigManager
+    public class ConfigManager
     {
-       public ConfigManager()
+        public ConfigManager()
         {
-            W_ReadInterval = ConfigurationManager.AppSettings["W_ReadInterval"].ToString(); 
-            W_ReadLastDate = ConfigurationManager.AppSettings["W_ReadLastDate"].ToString(); 
-            W_UploadInterval = ConfigurationManager.AppSettings["W_UploadInterval"].ToString(); 
-            W_UploadLastDate = ConfigurationManager.AppSettings["W_UploadLastDate"].ToString(); 
-            W_UploadQueryInterval = ConfigurationManager.AppSettings["W_UploadQueryInterval"].ToString(); 
-            W_UploadQueryLastDate = ConfigurationManager.AppSettings["W_UploadQueryLastDate"].ToString(); 
+            W_ID = ConfigurationManager.AppSettings["W_ID"].ToString();
+            W_TokenExpire = ConfigurationManager.AppSettings["W_TokenExpire"].ToString();
+            W_ReadInterval = ConfigurationManager.AppSettings["W_ReadInterval"].ToString();
+            W_ReadLastDate = ConfigurationManager.AppSettings["W_ReadLastDate"].ToString();
+            W_UploadInterval = ConfigurationManager.AppSettings["W_UploadInterval"].ToString();
+            W_UploadLastDate = ConfigurationManager.AppSettings["W_UploadLastDate"].ToString();
+            W_UploadQueryInterval = ConfigurationManager.AppSettings["W_UploadQueryInterval"].ToString();
+            W_UploadQueryLastDate = ConfigurationManager.AppSettings["W_UploadQueryLastDate"].ToString();
 
         }
         #region 水接口定时任务时间 间隔 配置
-
-
+        /// <summary>
+        /// 水接口token 也是集成客户id
+        /// </summary>
+        public string W_ID { get; set; }
+        /// <summary>
+        /// 过期时间 yyyy-MM-dd HH:mm:ss
+         /// </summary>
+        public string W_TokenExpire {get;set;}
         /// <summary>
         /// 批量抄表 时间间隔 一分钟为单位
         /// </summary>
