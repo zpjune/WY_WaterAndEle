@@ -15,6 +15,7 @@ using com.tqdq.sdk.enums;
 using com.tqdq.sdk.helper;
 using com.tqdq.sdk.log;
 using com.tqdq.sdk.parameters;
+using java.util;
 using log4net;
 using WYSD.Ele;
 
@@ -34,13 +35,50 @@ namespace WYSD
             try
             {
                 this.label1.Text = "任务正在执行中。。。";
-                
-                startTime();
+
+               // EleService sd = new EleService();
+               // sd.readRemainMoney();
+                //startTime();
                 // string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
                 // int a = SqlHelper.ExcuteNonQuery(sql);
                 // string res = "{\"Status\": true,\"Message\": null,\"Data\": {\"ID\": \"123\",\"RceiveList\": [{\"GUID\": \"1239999 \",\"Status\": true,\"Message\": null},{\"GUID\": \"1239900 \",\"Status\":true,\"Message\": null}]}}";
                 // JavaScriptSerializer Serializer = new JavaScriptSerializer();
                 // WaterPayResponseModeL model = Serializer.Deserialize<WaterPayResponseModeL>(res);
+
+                TQApi tqApi = new TQApi(
+                    ConfigCom.authCode,
+                    ConfigCom.nonce,
+                    ConfigCom.EleIP + ConfigCom.readRemainMoney,
+                    SyncMode.enable);
+
+
+               //java.util.Map<String, Object> m = new java.util.HashMap<String,Object>();
+                java.util.Map map = new java.util.HashMap();
+
+                map.put("opr_id", CommonUtil.generateOperateId());
+                map.put("address", "202003160000");
+                map.put("cid", "202003160000");
+                map.put("time_out", tqApi.getTimeOut());
+                map.put("must_online", true);
+                map.put("retry_time", tqApi.getRetryTimes());
+                map.put("type", ReadElecMeterType.RemainMoney.getType());
+                
+                java.util.List list = new java.util.ArrayList();
+                list.add(map);
+                TQResponse tqresponse = tqApi.readElecMeter(list);
+
+                /*
+                 {
+	TQResponse {
+		status = 'SUCCESS', errorMsg = 'null', responseContent = [{
+			opr_id = 1 c05fa34 - fc65 - 41 b2 - 9 c96 - b35f5351db69,
+			status = SUCCESS
+		}], timestamp = 1585114838, sign = 'ed6c8381d3b448f505516a4f999ecc0f'
+	}
+}
+                 */
+                string stats = tqresponse.getStatus();
+
                 this.button1.Enabled = false;
                 this.button2.Enabled = true;
 
@@ -49,37 +87,6 @@ namespace WYSD
             {
                log.Error("button1_Click（）出错：" + EX.Message);
             }
-          
-
-
-           // EleService s = new EleService();
-          //  s.readRemainMoney();
-            //// 设置sdk的底层http传输日志显示级别
-            //LogSetter.setHttp2Debug();
-            //// LogSetter.setHttp2Error();
-
-            //// 设置sdk日志显示级别
-            //LogSetter.setSdk2Debug();
-            //// LogSetter.setSdk2Error();
-
-            //TQApi tqApi = new TQApi(
-            //    "28ee95766b5ce43f931710d03e2c5028",
-            //    "1UxoNXlwHQOg4GxlS20y8vDEcVu",
-            //    "http://192.168.1.10:8080/notify",
-            //    SyncMode.enable);
-
-            //GeneralOperate generalOperate = new GeneralOperate(tqApi);
-
-            //// 添加采集器
-            //generalOperate.addController("111");
-            //// 批量读取电表的正向有功总电能
-            //generalOperate.readTotalPositiveActiveEnergyBatch(getIdPairs());
-
-            //// 构造Lora水表辅助对象
-            //LoraWaterMeter meter = new LoraWaterMeter("20190813000004", "100000000032", tqApi);
-
-            //// 读水表水价
-            //meter.readPrice();
         }
 
         private static java.util.List getIdPairs()

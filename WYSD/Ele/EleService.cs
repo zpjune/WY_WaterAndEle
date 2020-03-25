@@ -58,6 +58,21 @@ namespace WYSD.Ele
 
             return list;
         }
+        public string getOperId() {
+           string id= CommonUtil.generateOperateId();
+            //TQApi tqApi = new TQApi(
+            //    ConfigCom.authCode,
+            //    ConfigCom.nonce,
+            //    ConfigCom.EleIP + ConfigCom.readRemainMoney,
+            //    SyncMode.enable);
+            //java.util.Map map = new java.util.HashMap();
+            //map.put("a","sdf");
+            //map.put("c", "sdccf");
+            //java.util.List list = new java.util.ArrayList();
+            //list.add(map);
+            //TQResponse tQResponse = tqApi.readElecMeter(list);
+            return "";
+        }
         /// <summary>
         /// 读取当前电能 度数
         /// </summary>
