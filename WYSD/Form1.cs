@@ -16,6 +16,7 @@ using com.tqdq.sdk.helper;
 using com.tqdq.sdk.log;
 using com.tqdq.sdk.parameters;
 using java.util;
+using java.util.stream;
 using log4net;
 using WYSD.Ele;
 
@@ -36,8 +37,8 @@ namespace WYSD
             {
                 this.label1.Text = "任务正在执行中。。。";
 
-               // EleService sd = new EleService();
-               // sd.readRemainMoney();
+                 EleService sd = new EleService();
+                 sd.readActiveEnergyBatch();
                 //startTime();
                 // string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
                 // int a = SqlHelper.ExcuteNonQuery(sql);
@@ -45,39 +46,36 @@ namespace WYSD
                 // JavaScriptSerializer Serializer = new JavaScriptSerializer();
                 // WaterPayResponseModeL model = Serializer.Deserialize<WaterPayResponseModeL>(res);
 
-                TQApi tqApi = new TQApi(
-                    ConfigCom.authCode,
-                    ConfigCom.nonce,
-                    ConfigCom.EleIP + ConfigCom.readRemainMoney,
-                    SyncMode.enable);
+                //TQApi tqApi = new TQApi(
+                //           ConfigCom.authCode,
+                //           ConfigCom.nonce,
+                //           ConfigCom.EleIP + ConfigCom.readRemainMoney,
+                //           SyncMode.enable);
+                //java.util.List list = new java.util.ArrayList();
+               
+                //    java.util.Map map = new java.util.HashMap();
+                //    map.put("opr_id", CommonUtil.generateOperateId());
+                //   map.put("address", "201908290001");
+                //   map.put("cid", "201908290001");
+                //    map.put("time_out", tqApi.getTimeOut());
+                //    map.put("must_online", true);
+                //    map.put("retry_time", tqApi.getRetryTimes());
+                //    map.put("type", ReadElecMeterType.PositiveActiveEnergy.getType());//正向总电 能
+                //    list.add(map);
 
+                //TQResponse tqresponse = tqApi.readElecMeter(list);
+                //string stats = tqresponse.getStatus();
+                //if (stats == "SUCCESS")
+                //{
+                //    java.util.List listRes = tqresponse.getResponseContent();
+                //    for (int i = 0; i < listRes.size(); i++)
+                //    {
+                //        java.util.HashMap mp = (java.util.HashMap)listRes.get(i);
+                //        string opr_id = mp.get("opr_id").ToString();
+                //        //
+                //    }
+                //}
 
-               //java.util.Map<String, Object> m = new java.util.HashMap<String,Object>();
-                java.util.Map map = new java.util.HashMap();
-
-                map.put("opr_id", CommonUtil.generateOperateId());
-                map.put("address", "202003160000");
-                map.put("cid", "202003160000");
-                map.put("time_out", tqApi.getTimeOut());
-                map.put("must_online", true);
-                map.put("retry_time", tqApi.getRetryTimes());
-                map.put("type", ReadElecMeterType.RemainMoney.getType());
-                
-                java.util.List list = new java.util.ArrayList();
-                list.add(map);
-                TQResponse tqresponse = tqApi.readElecMeter(list);
-
-                /*
-                 {
-	TQResponse {
-		status = 'SUCCESS', errorMsg = 'null', responseContent = [{
-			opr_id = 1 c05fa34 - fc65 - 41 b2 - 9 c96 - b35f5351db69,
-			status = SUCCESS
-		}], timestamp = 1585114838, sign = 'ed6c8381d3b448f505516a4f999ecc0f'
-	}
-}
-                 */
-                string stats = tqresponse.getStatus();
 
                 this.button1.Enabled = false;
                 this.button2.Enabled = true;

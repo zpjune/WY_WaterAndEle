@@ -59,6 +59,10 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="fastJSON, Version=2.3.0.0, Culture=neutral, PublicKeyToken=6b75a806b86095cd, processorArchitecture=MSIL">
       <HintPath>..\packages\fastJSON.2.3.1\lib\net40\fastJSON.dll</HintPath>
@@ -105,6 +109,9 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PHUEncode">
+      <HintPath>WaterLib\PHUEncode.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -177,18 +184,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DianLib\IKVM.OpenJDK.Charsets.dll" />
-    <Content Include="DianLib\IKVM.OpenJDK.Core.dll" />
-    <Content Include="DianLib\IKVM.OpenJDK.Jdbc.dll" />
-    <Content Include="DianLib\IKVM.OpenJDK.Localedata.dll" />
-    <Content Include="DianLib\IKVM.OpenJDK.Security.dll" />
-    <Content Include="DianLib\IKVM.OpenJDK.Text.dll" />
-    <Content Include="DianLib\IKVM.OpenJDK.Util.dll" />
-    <Content Include="DianLib\IKVM.OpenJDK.XML.API.dll" />
-    <Content Include="DianLib\IKVM.Runtime.dll" />
-    <Content Include="DianLib\LHSM.Logs.dll" />
-    <Content Include="DianLib\log4net.dll" />
-    <Content Include="DianLib\TQSDK-1.0.0-jar-with-dependencies.dll" />
     <Content Include="icon\water.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +192,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WaterLib\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿//using PHUEncode;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -269,8 +270,10 @@ namespace WYSD
                 string userName = ConfigCom.W_UserName;
                 string userPass = ConfigCom.W_UserPass;
                 string uri = ConfigCom.W_TokenUri;
-                string encryUserName = "";//加密
-                string encryUserPass = "";//加密
+                // DataEncryption data = new DataEncryption();
+                //加密方法      
+                string encryUserName = "";// data.Encryption(userName);
+                string encryUserPass = "";// data.Encryption(userPass);
                 RestClient rc = new RestClient(baseUri);
                 string res = rc.Get(uri + "/" + encryUserName + "/" + encryUserPass);
                 //验证res
@@ -286,6 +289,51 @@ namespace WYSD
                 log.Error("GetToken()出错："+ex.Message.ToString());
                 return "false";
             }
+        }
+
+        public void TongZhi() {
+            try
+            {
+                string sql = @"select b.FWID,a.MeterAccflow ,c.MOBILE_PHONE,c.OPEN_ID ,1 JFLX,0 JFZT,0 SFTZ,GETDATE() YXQZ
+                        from wy_w_amount a
+                        join wy_houseinfo b on a.MeterID=b.WATER_NUMBER
+                        join wy_shopinfo c on c.CZ_SHID=c.CZ_SHID
+                        WHERE DATEDIFF(day, CreateDate,GETDATE() )=0 and 
+                        a.MeterAccflow<= (select cast(CONF_VALUE as DECIMAL(18,2)) from ts_uidp_config  where CONF_CODE='Water_Reminder')
+                        ";
+                DataTable dt = SqlHelper.ExexuteDataTalbe(sql);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("insert into wy_pay_record (RECORD_ID,JFLX,FWID,JFZT,SFTZ,JFCS,YXQZ,SURPLUSVALUE,CZ_SHID,OPEN_ID,CREATE_TIME)values");
+                    string dateNow = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        sb.AppendLine("(  ");
+                        sb.Append("'" + Guid.NewGuid().ToString() + "',1,");
+                        sb.Append("'" + row["FWID"]?.ToString() + "',0,1");
+                        sb.Append("'" + dateNow + "',");
+                        sb.Append("'" + row["FWID"]?.ToString() + "',");
+                        sb.Append("'" + row["FWID"]?.ToString() + "',");
+                        sb.Append("'" + dateNow + "'");
+                        sb.AppendLine("),");
+                    }
+                    string sqlinsert = sb.ToString().Substring(0, sb.Length - 1);
+                    if (SqlHelper.ExcuteNonQuery(sqlinsert) > 0)
+                    {
+
+                    }
+                    else
+                    {
+                        log.Info("创建水费通知单失败！");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("TongZhi()创建水费通知单失败："+ex.Message.ToString());
+            }
+           
         }
        
     }
