@@ -25,13 +25,13 @@ namespace WYSD
         /// </summary>
         public static string EleIP { get; set; }
         /// <summary>
-        /// 电接口 授权码
+        /// 电接口 读取余额api 接收地址
         /// </summary>
         public static string readRemainMoney { get; set; }
         /// <summary>
-        /// 电接口 授权码
+        /// 电接口 读取总电能 api 接收地址
         /// </summary>
-        public static string readRemainEle { get; set; }
+        public static string ActiveEnergy { get; set; }
         #endregion
         #region 水接口参数配置
         /// <summary>
@@ -75,7 +75,7 @@ namespace WYSD
             nonce = ConfigurationManager.AppSettings["nonce"].ToString();
             EleIP = ConfigurationManager.AppSettings["EleIP"].ToString();
             readRemainMoney = ConfigurationManager.AppSettings["readRemainMoney"].ToString();
-            readRemainEle = ConfigurationManager.AppSettings["readRemainEle"].ToString();
+            ActiveEnergy = ConfigurationManager.AppSettings["ActiveEnergy"].ToString();
             #endregion
             #region 水接口参数
            

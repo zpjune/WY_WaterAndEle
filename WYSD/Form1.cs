@@ -36,9 +36,10 @@ namespace WYSD
             try
             {
                 this.label1.Text = "任务正在执行中。。。";
-
-                 EleService sd = new EleService();
-                 sd.readActiveEnergyBatch();
+                
+                // EleService sd = new EleService();
+                //sd.readActiveEnergyBatch();
+                // sd.readRemainMoney();
                 //startTime();
                 // string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
                 // int a = SqlHelper.ExcuteNonQuery(sql);
@@ -46,23 +47,26 @@ namespace WYSD
                 // JavaScriptSerializer Serializer = new JavaScriptSerializer();
                 // WaterPayResponseModeL model = Serializer.Deserialize<WaterPayResponseModeL>(res);
 
-                //TQApi tqApi = new TQApi(
-                //           ConfigCom.authCode,
-                //           ConfigCom.nonce,
-                //           ConfigCom.EleIP + ConfigCom.readRemainMoney,
-                //           SyncMode.enable);
-                //java.util.List list = new java.util.ArrayList();
-               
-                //    java.util.Map map = new java.util.HashMap();
-                //    map.put("opr_id", CommonUtil.generateOperateId());
-                //   map.put("address", "201908290001");
-                //   map.put("cid", "201908290001");
-                //    map.put("time_out", tqApi.getTimeOut());
-                //    map.put("must_online", true);
-                //    map.put("retry_time", tqApi.getRetryTimes());
-                //    map.put("type", ReadElecMeterType.PositiveActiveEnergy.getType());//正向总电 能
-                //    list.add(map);
+                TQApi tqApi = new TQApi(
+                           ConfigCom.authCode,
+                           ConfigCom.nonce,
+                           ConfigCom.EleIP + ConfigCom.readRemainMoney,
+                           SyncMode.enable);
+                java.util.List list = new java.util.ArrayList();
 
+                java.util.Map map = new java.util.HashMap();
+                map.put("opr_id", CommonUtil.generateOperateId());
+                map.put("address", "201908290001");
+                map.put("cid", "201908290001");
+                map.put("time_out", tqApi.getTimeOut());
+                map.put("must_online", true);
+                map.put("retry_time", tqApi.getRetryTimes());
+               // map.put("type", ReadElecMeterType.RemainMoney.getType());//正向总电 能
+                ElecMeterAccount elecMeterAccount = new ElecMeterAccount("1234", "1", "100");
+                map.put("params", elecMeterAccount.getAccount());
+                list.add(map);
+                //ElecMeterAccount elecMeterAccount = new ElecMeterAccount("1234", "2", "100");
+                TQResponse tqresponse = tqApi.elecMeterOpenAccount(list);
                 //TQResponse tqresponse = tqApi.readElecMeter(list);
                 //string stats = tqresponse.getStatus();
                 //if (stats == "SUCCESS")
@@ -75,8 +79,6 @@ namespace WYSD
                 //        //
                 //    }
                 //}
-
-
                 this.button1.Enabled = false;
                 this.button2.Enabled = true;
 
