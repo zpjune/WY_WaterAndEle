@@ -16,11 +16,12 @@ namespace WYSD.Ele
 {
     public class EleService
     {
+        private static readonly object objUploadPay = new object();
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// 批量读取电能
         /// </summary>
-        public void readActiveEnergyBatch() {
+        public void ReadActiveEnergyBatch() {
             try
             {
                 string sqlQuery = "SELECT ELE_NUMBER,CID FROM wy_houseinfo a where a.FWSX<>0 ";
@@ -28,11 +29,11 @@ namespace WYSD.Ele
                 if (dt != null && dt.Rows.Count > 0)
                 {  
                     // 设置sdk的底层http传输日志显示级别
-                    LogSetter.setHttp2Debug();
+                   // LogSetter.setHttp2Debug();
                     // LogSetter.setHttp2Error();
 
                     // 设置sdk日志显示级别
-                    LogSetter.setSdk2Debug();
+                   // LogSetter.setSdk2Debug();
                     // LogSetter.setSdk2Error();
                     //"http://192.168.1.10:8080/notify"
 
@@ -178,7 +179,7 @@ namespace WYSD.Ele
         /// <summary>
         /// 批量读取余额
         /// </summary>
-        public void readRemainMoney()
+        public void ReadRemainMoney()
         {
             try
             {
@@ -187,11 +188,11 @@ namespace WYSD.Ele
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     // 设置sdk的底层http传输日志显示级别
-                    LogSetter.setHttp2Debug();
+                   // LogSetter.setHttp2Debug();
                     // LogSetter.setHttp2Error();
 
                     // 设置sdk日志显示级别
-                    LogSetter.setSdk2Debug();
+                   // LogSetter.setSdk2Debug();
                     // LogSetter.setSdk2Error();
                     //"http://192.168.1.10:8080/notify"
 
@@ -340,24 +341,100 @@ namespace WYSD.Ele
             }
 
         }
-
-        private static java.util.List getIdPairs()
-    {
-        java.util.List list = new java.util.LinkedList();
-
-
-        list.add(new MeterIdPair("202003160000", "202003160000"));
-        list.add(new MeterIdPair("123", "3423"));
-        list.add(new MeterIdPair("1122", "3223"));
-
-        return list;
-    }
     /// <summary>
     /// 批量充值
     /// </summary>
     public void ElecMeterRechargeBatch()
     {
-
-    }
+            try
+            {
+                lock (objUploadPay)
+                {
+                   
+                    string sqlSelect = "select id,address,cid,Cost,'' opr_id FROM wy_ele_recharge where CStatus<>'SUCCESS' or CStatus is null";
+                    DataTable dtSelect = SqlHelper.ExexuteDataTalbe(sqlSelect);
+                    if (dtSelect != null && dtSelect.Rows.Count > 0)
+                    {
+                        TQApi tqApi = new TQApi(
+                          ConfigCom.authCode,
+                          ConfigCom.nonce,
+                          ConfigCom.EleIP + ConfigCom.rechargeEle,
+                          SyncMode.enable);
+                        java.util.List list = new java.util.ArrayList();
+                        java.util.Map map;
+                        foreach (DataRow row in dtSelect.Rows)
+                        {
+                            map = new java.util.HashMap();
+                            string opr_id = CommonUtil.generateOperateId();
+                            row["opr_id"] = opr_id;
+                            map.put("opr_id", opr_id);
+                            map.put("address", row["address"].ToString());
+                            map.put("cid", row["cid"].ToString());
+                            map.put("time_out", tqApi.getTimeOut());
+                            map.put("must_online", true);
+                            map.put("retry_time", tqApi.getRetryTimes());
+                            ElecMeterAccount elecMeterAccount = new ElecMeterAccount("1234", "2", row["Cost"].ToString());
+                            map.put("params", elecMeterAccount.getAccount());
+                            list.add(map);
+                        }
+                        TQResponse tqresponse = tqApi.elecMeterRecharge(list);//充值
+                        if (tqresponse.getStatus() == "SUCCESS")
+                        {
+                            java.util.List listRes = tqresponse.getResponseContent();
+                            StringBuilder sb = new StringBuilder();
+                            string dateNow = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                            for (int i = 0; i < listRes.size(); i++) {
+                                java.util.HashMap mp = (java.util.HashMap)listRes.get(i);
+                                DataRow[] rowArr = dtSelect.Select("opr_id='"+mp.get("opr_id").ToString()+"'");
+                                if (mp.get("status").ToString() == "SUCCESS")
+                                {
+                                    sb.Append("update wy_ele_recharge set opr_id='" + rowArr[0]["opr_id"] + "', ");
+                                    sb.Append("CStatus='SUCCESS',CUpdateDate='" + dateNow + "' where id='" + rowArr[0]["id"] + "' ; ");
+                                }
+                                else {
+                                    sb.Append("update wy_ele_recharge set opr_id='" + rowArr[0]["opr_id"] + "', ");
+                                    sb.Append("CStatus='"+ mp.get("status").ToString() + "',CMessage='"+ mp.get("error_msg").ToString() + "',CUpdateDate='" + dateNow + "' where id='" + rowArr[0]["id"] + "' ; ");
+                                }
+                            }
+                            if (SqlHelper.ExcuteNonQuery(sb.ToString()) > 0)
+                            {
+                                log.Info("电接口充值ElecMeterRechargeBatch()上传充值数据成功");
+                            }
+                            else {
+                                log.Error("电接口充值ElecMeterRechargeBatch()上传充值数据失败");
+                            }
+                        }
+                        else {
+                            log.Error("电接口充值ElecMeterRechargeBatch()tqresponse！=SUCCESS,err_message:"+tqresponse.getErrorMsg());
+                        }
+                        
+                        /*
+                   {
+      TQResponse {
+          status = 'SUCCESS', errorMsg = 'null', responseContent = [{
+              opr_id = 1 c05fa34 - fc65 - 41 b2 - 9 c96 - b35f5351db69,
+              status = SUCCESS ,error_msg
+          }], timestamp = 1585114838, sign = 'ed6c8381d3b448f505516a4f999ecc0f'
+      }
+  }
+  [{
+      "opr_id": "e3dfb115-2f07-46eb-a36f-0b6442bb1d1e",
+      "resolve_time": "2020-03-27 17:14:02",
+      "status": "SUCCESS",
+      "data": [{
+          "type": 3,
+          "value": ["0.00", "0.00", "0.00", "0.00", "0.00"],
+          "dsp": "总 : 0.00 kWh 尖 : 0.00 kWh 峰 : 0.00 kWh 平 : 0.00 kWh 谷 : 0.00 kWh"
+      }]
+  }]
+                   */
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("电接口充值ElecMeterRechargeBatch()执行失败！" + ex.Message.ToString());
+            }
+        }
 }
 }

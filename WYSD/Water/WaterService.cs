@@ -101,7 +101,7 @@ namespace WYSD
                     
                     string Uri = ConfigCom.W_UploadUri;
                     RestClient rc = new RestClient(baseUri);
-                    string sqlSelect = "select GUID,MeterID,RechargeVolume,AddAmount,UnitPrice FROM wy_w_pay where CStatus<>1";
+                    string sqlSelect = "select GUID,MeterID,RechargeVolume,AddAmount,UnitPrice FROM wy_w_pay where CStatus<>1 or CStatus is null";
                     DataTable dtSelect = SqlHelper.ExexuteDataTalbe(sqlSelect);
                     if (dtSelect != null && dtSelect.Rows.Count > 0)
                     {
@@ -186,7 +186,7 @@ namespace WYSD
                 {
                     string Uri = ConfigCom.W_UploadQueryUri;
                     RestClient rc = new RestClient(baseUri);
-                    string sqlSelect = "select GUID,MeterID FROM wy_w_pay where CStatus=1 AND PStatus<>1 ";
+                    string sqlSelect = "select GUID,MeterID FROM wy_w_pay where CStatus=1 AND (PStatus<>1 or PStatus is null)";
                     DataTable dtSelect = SqlHelper.ExexuteDataTalbe(sqlSelect);
                     if (dtSelect != null && dtSelect.Rows.Count > 0)
                     {

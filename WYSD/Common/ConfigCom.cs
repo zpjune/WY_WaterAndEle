@@ -32,6 +32,10 @@ namespace WYSD
         /// 电接口 读取总电能 api 接收地址
         /// </summary>
         public static string ActiveEnergy { get; set; }
+        /// <summary>
+        /// 批量充值回调接口
+        /// </summary>
+        public static string rechargeEle { get; set; }
         #endregion
         #region 水接口参数配置
         /// <summary>
@@ -76,9 +80,10 @@ namespace WYSD
             EleIP = ConfigurationManager.AppSettings["EleIP"].ToString();
             readRemainMoney = ConfigurationManager.AppSettings["readRemainMoney"].ToString();
             ActiveEnergy = ConfigurationManager.AppSettings["ActiveEnergy"].ToString();
+            rechargeEle= ConfigurationManager.AppSettings["rechargeEle"].ToString();
             #endregion
             #region 水接口参数
-           
+
             W_BaseUri = ConfigurationManager.AppSettings["W_BaseUri"].ToString();
             W_ReadUri = ConfigurationManager.AppSettings["W_ReadUri"].ToString();
             W_UploadUri = ConfigurationManager.AppSettings["W_UploadUri"].ToString();

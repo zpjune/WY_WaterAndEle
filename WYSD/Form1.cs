@@ -36,9 +36,9 @@ namespace WYSD
             try
             {
                 this.label1.Text = "任务正在执行中。。。";
-                
-                // EleService sd = new EleService();
-                //sd.readActiveEnergyBatch();
+
+                 EleService sd = new EleService();
+                 sd.ElecMeterRechargeBatch();
                 // sd.readRemainMoney();
                 //startTime();
                 // string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
@@ -46,39 +46,29 @@ namespace WYSD
                 // string res = "{\"Status\": true,\"Message\": null,\"Data\": {\"ID\": \"123\",\"RceiveList\": [{\"GUID\": \"1239999 \",\"Status\": true,\"Message\": null},{\"GUID\": \"1239900 \",\"Status\":true,\"Message\": null}]}}";
                 // JavaScriptSerializer Serializer = new JavaScriptSerializer();
                 // WaterPayResponseModeL model = Serializer.Deserialize<WaterPayResponseModeL>(res);
+               // LogSetter.setHttp2Debug();
+               // TQApi tqApi = new TQApi(
+               //            ConfigCom.authCode,
+               //            ConfigCom.nonce,
+               //            ConfigCom.EleIP + ConfigCom.readRemainMoney,
+               //            SyncMode.enable);
+               // java.util.List list = new java.util.ArrayList();
 
-                TQApi tqApi = new TQApi(
-                           ConfigCom.authCode,
-                           ConfigCom.nonce,
-                           ConfigCom.EleIP + ConfigCom.readRemainMoney,
-                           SyncMode.enable);
-                java.util.List list = new java.util.ArrayList();
-
-                java.util.Map map = new java.util.HashMap();
-                map.put("opr_id", CommonUtil.generateOperateId());
-                map.put("address", "201908290001");
-                map.put("cid", "201908290001");
-                map.put("time_out", tqApi.getTimeOut());
-                map.put("must_online", true);
-                map.put("retry_time", tqApi.getRetryTimes());
+               // java.util.Map map = new java.util.HashMap();
+               // map.put("opr_id", CommonUtil.generateOperateId());
+               // map.put("address", "201908290001");
+               // map.put("cid", "201908290001");
+               // map.put("time_out", tqApi.getTimeOut());
+               // map.put("must_online", true);
+               // map.put("retry_time", tqApi.getRetryTimes());
                // map.put("type", ReadElecMeterType.RemainMoney.getType());//正向总电 能
-                ElecMeterAccount elecMeterAccount = new ElecMeterAccount("1234", "1", "100");
-                map.put("params", elecMeterAccount.getAccount());
-                list.add(map);
-                //ElecMeterAccount elecMeterAccount = new ElecMeterAccount("1234", "2", "100");
-                TQResponse tqresponse = tqApi.elecMeterOpenAccount(list);
-                //TQResponse tqresponse = tqApi.readElecMeter(list);
-                //string stats = tqresponse.getStatus();
-                //if (stats == "SUCCESS")
-                //{
-                //    java.util.List listRes = tqresponse.getResponseContent();
-                //    for (int i = 0; i < listRes.size(); i++)
-                //    {
-                //        java.util.HashMap mp = (java.util.HashMap)listRes.get(i);
-                //        string opr_id = mp.get("opr_id").ToString();
-                //        //
-                //    }
-                //}
+               // ElecMeterAccount elecMeterAccount = new ElecMeterAccount("121534", "10", "");
+               // map.put("params", elecMeterAccount.getAccount());
+               // list.add(map);
+               //TQResponse tqresponse = tqApi.elecMeterOpenAccount(list);//开户
+               // TQResponse tqresponse = tqApi.elecMeterReset(list);//清零
+               // TQResponse tqresponse = tqApi.elecMeterRecharge(list);//充值
+               //TQResponse tqresponse = tqApi.readElecMeter(list);//余额
                 this.button1.Enabled = false;
                 this.button2.Enabled = true;
 
