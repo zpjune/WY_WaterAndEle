@@ -79,16 +79,6 @@ namespace WYSD
             }
         }
 
-        private static java.util.List getIdPairs()
-        {
-            java.util.List list = new java.util.LinkedList();
-            list.add(new MeterIdPair("202003160000", "202003160000"));
-            list.add(new MeterIdPair("123", "3423"));
-            list.add(new MeterIdPair("1122", "3223"));
-
-            return list;
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             stopTime();
@@ -150,6 +140,10 @@ namespace WYSD
             string W_ReadLastDate = Convert.ToDateTime(mg.W_ReadLastDate).AddMinutes(Convert.ToDouble(mg.W_ReadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
             // string W_UploadLastDate = Convert.ToDateTime(mg.W_UploadLastDate).AddMinutes(Convert.ToDouble(mg.W_UploadInterval)).ToString("yyyy-MM-dd HH:mm:ss");
             // string W_UploadQueryLastDate = Convert.ToDateTime(mg.W_UploadQueryLastDate).AddMinutes(Convert.ToDouble(mg.W_UploadQueryInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+            string E_ActiveEnergyQueryLastDate = Convert.ToDateTime(mg.E_ActiveEnergyQueryLastDate).AddMinutes(Convert.ToDouble(mg.E_ActiveEnergyQueryInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+            string E_readRemainMoneyLastDate = Convert.ToDateTime(mg.E_readRemainMoneyLastDate).AddMinutes(Convert.ToDouble(mg.E_readRemainMoneyInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+            string E_rechargeEleLastDate = Convert.ToDateTime(mg.E_rechargeEleLastDate).AddMinutes(Convert.ToDouble(mg.E_rechargeEleInterval)).ToString("yyyy-MM-dd HH:mm:ss");
+
             if (dtNow== W_ReadLastDate) {
                 mg.SetValue("W_ReadLastDate", W_ReadLastDate);
                 SetLableText();
@@ -176,6 +170,30 @@ namespace WYSD
             //    //ws.GetWaterPayState();
 
             //}
+            if (dtNow == E_ActiveEnergyQueryLastDate)
+            {
+                mg.SetValue("E_ActiveEnergyQueryLastDate", E_ActiveEnergyQueryLastDate);
+                SetLableText();
+                //执行批量读取总电能
+                EleService es = new EleService();
+                es.ReadActiveEnergyBatch();
+            }
+            if (dtNow == E_readRemainMoneyLastDate)
+            {
+                mg.SetValue("E_readRemainMoneyLastDate", E_readRemainMoneyLastDate);
+                SetLableText();
+                //执行批量读取电余额
+                EleService es = new EleService();
+                es.ReadRemainMoneyBatch();
+            }
+            if (dtNow == E_rechargeEleLastDate)
+            {
+                mg.SetValue("E_rechargeEleLastDate", E_rechargeEleLastDate);
+                SetLableText();
+                //执行批量充值电
+                EleService es = new EleService();
+                es.ElecMeterRechargeBatch();
+            }
         }
         #endregion
         private void SetLableText() {
@@ -189,7 +207,9 @@ namespace WYSD
                         this.lb_w1.Text = md.W_ReadLastDate;
                         this.lb_w2.Text = md.W_UploadLastDate;
                         this.lb_w3.Text = md.W_UploadQueryLastDate;
-
+                        this.lb_ele_enger.Text = md.E_ActiveEnergyQueryLastDate;
+                        this.lb_ele_remain.Text = md.E_readRemainMoneyLastDate;
+                        this.lb_ele_recharge.Text = md.E_rechargeEleLastDate;
                     };
                     Invoke(action);
 
@@ -206,6 +226,9 @@ namespace WYSD
                 ConfigCom.SetValue("W_ReadLastDate",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 ConfigCom.SetValue("W_UploadLastDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 ConfigCom.SetValue("W_UploadQueryLastDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                ConfigCom.SetValue("E_ActiveEnergyQueryLastDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                ConfigCom.SetValue("E_readRemainMoneyLastDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                ConfigCom.SetValue("E_rechargeEleLastDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             }
             catch (Exception ex)
             {

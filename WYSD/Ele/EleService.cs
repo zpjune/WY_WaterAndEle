@@ -179,7 +179,7 @@ namespace WYSD.Ele
         /// <summary>
         /// 批量读取余额
         /// </summary>
-        public void ReadRemainMoney()
+        public void ReadRemainMoneyBatch()
         {
             try
             {
@@ -403,6 +403,7 @@ namespace WYSD.Ele
                             else {
                                 log.Error("电接口充值ElecMeterRechargeBatch()上传充值数据失败");
                             }
+                            ReadRemainMoneyBatch();//充值成功后重新查询余额
                         }
                         else {
                             log.Error("电接口充值ElecMeterRechargeBatch()tqresponse！=SUCCESS,err_message:"+tqresponse.getErrorMsg());

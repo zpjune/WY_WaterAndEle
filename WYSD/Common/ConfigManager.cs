@@ -11,6 +11,7 @@ namespace WYSD
     {
         public ConfigManager()
         {
+            //水
             W_ID = ConfigurationManager.AppSettings["W_ID"].ToString();
             W_TokenExpire = ConfigurationManager.AppSettings["W_TokenExpire"].ToString();
             W_ReadInterval = ConfigurationManager.AppSettings["W_ReadInterval"].ToString();
@@ -19,6 +20,13 @@ namespace WYSD
             W_UploadLastDate = ConfigurationManager.AppSettings["W_UploadLastDate"].ToString();
             W_UploadQueryInterval = ConfigurationManager.AppSettings["W_UploadQueryInterval"].ToString();
             W_UploadQueryLastDate = ConfigurationManager.AppSettings["W_UploadQueryLastDate"].ToString();
+            //电
+            E_ActiveEnergyQueryInterval = ConfigurationManager.AppSettings["E_ActiveEnergyQueryInterval"].ToString();
+            E_ActiveEnergyQueryLastDate = ConfigurationManager.AppSettings["E_ActiveEnergyQueryLastDate"].ToString();
+            E_readRemainMoneyInterval = ConfigurationManager.AppSettings["E_readRemainMoneyInterval"].ToString();
+            E_readRemainMoneyLastDate = ConfigurationManager.AppSettings["E_readRemainMoneyLastDate"].ToString();
+            E_rechargeEleInterval = ConfigurationManager.AppSettings["E_rechargeEleInterval"].ToString();
+            E_rechargeEleLastDate = ConfigurationManager.AppSettings["E_rechargeEleLastDate"].ToString();
 
         }
         #region 水接口定时任务时间 间隔 配置
@@ -54,10 +62,39 @@ namespace WYSD
         /// 上次执行查询充值是否真正充值成功 时间
         /// </summary>
         public string W_UploadQueryLastDate { get; set; }
-        
+
 
         #endregion
-        public  void SetValue(string AppKey, string AppValue)
+        #region 电接口定时任务时间 间隔 配置
+        /// <summary>
+        /// 查询总电能 时间间隔 一分钟为单位
+        /// </summary>
+        public string E_ActiveEnergyQueryInterval { get; set; }
+        /// <summary>
+        /// 查询总电能上次抄表执行时间
+        /// </summary>
+        public string E_ActiveEnergyQueryLastDate { get; set; }
+        /// <summary>
+        /// 查询余额时间间隔
+        /// </summary>
+        public string E_readRemainMoneyInterval { get; set; }
+        /// <summary>
+        /// 查询余额 上次时间数据时间
+        /// </summary>
+        public string E_readRemainMoneyLastDate { get; set; }
+        /// <summary>
+        /// 充值成功 执行时间间隔
+        /// </summary>
+        public string E_rechargeEleInterval { get; set; }
+        /// <summary>
+        /// 询充值是否真正充值成功 时间
+        /// </summary>
+        public string E_rechargeEleLastDate { get; set; }
+
+
+        #endregion
+
+        public void SetValue(string AppKey, string AppValue)
         {
             Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                        //根据Key读取<add>元素的Value

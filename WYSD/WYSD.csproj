@@ -139,7 +139,6 @@
     <Compile Include="Common\RestClient.cs" />
     <Compile Include="Common\SqlHelper.cs" />
     <Compile Include="Common\TableToListCom.cs" />
-    <Compile Include="Ele\EleResponseModle.cs" />
     <Compile Include="Ele\EleService.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

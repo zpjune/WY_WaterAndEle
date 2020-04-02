@@ -46,8 +46,15 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.lb_ele_enger = new System.Windows.Forms.Label();
+            this.lb_ele_remain = new System.Windows.Forms.Label();
+            this.lb_ele_recharge = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -115,6 +122,12 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.label7);
+            this.groupBox2.Controls.Add(this.lb_ele_recharge);
+            this.groupBox2.Controls.Add(this.lb_ele_remain);
+            this.groupBox2.Controls.Add(this.lb_ele_enger);
+            this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Location = new System.Drawing.Point(26, 188);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(566, 137);
@@ -216,6 +229,66 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label6
+            // 
+            this.label6.AccessibleDescription = "";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(20, 32);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(125, 12);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "最新读取总电能时间：";
+            // 
+            // label7
+            // 
+            this.label7.AccessibleDescription = "";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(20, 68);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(113, 12);
+            this.label7.TabIndex = 3;
+            this.label7.Text = "最新电表余额时间：";
+            // 
+            // label8
+            // 
+            this.label8.AccessibleDescription = "";
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(20, 106);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(113, 12);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "最新批量充值时间：";
+            // 
+            // lb_ele_enger
+            // 
+            this.lb_ele_enger.AccessibleDescription = "";
+            this.lb_ele_enger.AutoSize = true;
+            this.lb_ele_enger.Location = new System.Drawing.Point(202, 32);
+            this.lb_ele_enger.Name = "lb_ele_enger";
+            this.lb_ele_enger.Size = new System.Drawing.Size(119, 12);
+            this.lb_ele_enger.TabIndex = 3;
+            this.lb_ele_enger.Text = "2020-03-02 02:02:02";
+            // 
+            // lb_ele_remain
+            // 
+            this.lb_ele_remain.AccessibleDescription = "";
+            this.lb_ele_remain.AutoSize = true;
+            this.lb_ele_remain.Location = new System.Drawing.Point(202, 68);
+            this.lb_ele_remain.Name = "lb_ele_remain";
+            this.lb_ele_remain.Size = new System.Drawing.Size(119, 12);
+            this.lb_ele_remain.TabIndex = 3;
+            this.lb_ele_remain.Text = "2020-03-02 02:02:02";
+            // 
+            // lb_ele_recharge
+            // 
+            this.lb_ele_recharge.AccessibleDescription = "";
+            this.lb_ele_recharge.AutoSize = true;
+            this.lb_ele_recharge.Location = new System.Drawing.Point(202, 106);
+            this.lb_ele_recharge.Name = "lb_ele_recharge";
+            this.lb_ele_recharge.Size = new System.Drawing.Size(119, 12);
+            this.lb_ele_recharge.TabIndex = 3;
+            this.lb_ele_recharge.Text = "2020-03-02 02:02:02";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -229,6 +302,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -253,6 +328,12 @@
         private System.Windows.Forms.Label lb_w1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lb_ele_recharge;
+        private System.Windows.Forms.Label lb_ele_remain;
+        private System.Windows.Forms.Label lb_ele_enger;
+        private System.Windows.Forms.Label label6;
     }
 }
 
