@@ -1,4 +1,5 @@
 ﻿//using PHUEncode;
+using PHUEncode;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,10 +14,10 @@ namespace WYSD
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         JavaScriptSerializer Serializer = new JavaScriptSerializer();
-        private string baseUri = ConfigCom.W_BaseUri;
+        private readonly string baseUri = ConfigCom.W_BaseUri;
        
-        private static object objUpload = new object();
-        private static object objUploadQuery = new object();
+        private static readonly object objUpload = new object();
+        private static readonly object objUploadQuery = new object();
         /// <summary>
         /// 用水余量查询-批量查询
         /// </summary>
@@ -28,7 +29,7 @@ namespace WYSD
                 ConfigManager cg = new ConfigManager();
                 if (cg.W_ID==""||(cg.W_ID!=""&&!DateTimeCom.BoolDateTime(cg.W_TokenExpire,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")))) {
                     cg.W_ID = GetToken();
-                    cg.W_TokenExpire = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                   // cg.W_TokenExpire = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 }
                     string readUri = ConfigCom.W_ReadUri;
                     RestClient rc = new RestClient(baseUri);
@@ -110,7 +111,7 @@ namespace WYSD
                         if (cg.W_ID == "" || (cg.W_ID != "" && !DateTimeCom.BoolDateTime(cg.W_TokenExpire, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))))
                         {
                             cg.W_ID = GetToken();
-                            cg.W_TokenExpire = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                            //cg.W_TokenExpire = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                         }
                         WaterPayInfoModleL payInfo = new WaterPayInfoModleL() { ID = cg.W_ID, PayList = payList };
                         string questStr = Newtonsoft.Json.JsonConvert.SerializeObject(payInfo);
@@ -195,7 +196,7 @@ namespace WYSD
                         if (cg.W_ID == "" || (cg.W_ID != "" && !DateTimeCom.BoolDateTime(cg.W_TokenExpire, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))))
                         {
                             cg.W_ID = GetToken();
-                            cg.W_TokenExpire = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                            //cg.W_TokenExpire = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                         }
                         WaterPayResQuestModelL payInfo = new WaterPayResQuestModelL() { ID = cg.W_ID, ResultList = payList };
                         string questStr = Newtonsoft.Json.JsonConvert.SerializeObject(payInfo);
@@ -270,19 +271,24 @@ namespace WYSD
                 string userName = ConfigCom.W_UserName;
                 string userPass = ConfigCom.W_UserPass;
                 string uri = ConfigCom.W_TokenUri;
-                // DataEncryption data = new DataEncryption();
+                 DataEncryption data = new DataEncryption();
                 //加密方法      
-                string encryUserName = "";// data.Encryption(userName);
-                string encryUserPass = "";// data.Encryption(userPass);
+                string encryUserName =  data.Encryption(userName);
+                string encryUserPass =  data.Encryption(userPass);
                 RestClient rc = new RestClient(baseUri);
                 string res = rc.Get(uri + "/" + encryUserName + "/" + encryUserPass);
                 //验证res
-
-
-
-                ConfigCom.SetValue("W_ID", res);
-                ConfigCom.SetValue("W_TokenExpire", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                return res;
+                if (string.IsNullOrWhiteSpace(res))
+                {
+                    ConfigCom.SetValue("W_ID", res);
+                    ConfigCom.SetValue("W_TokenExpire", DateTime.Now.AddMinutes(Convert.ToDouble(ConfigCom.W_TokenExpireInterval)).ToString("yyyy-MM-dd HH:mm:ss"));
+                    return res;
+                }
+                else {
+                    log.Error("GetToken()返回值为空" );
+                    return "";
+                }
+               
             }
             catch (Exception ex)
             {
