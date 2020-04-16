@@ -37,8 +37,12 @@ namespace WYSD
             {
                 this.label1.Text = "任务正在执行中。。。";
 
-                 EleService sd = new EleService();
-                 sd.ElecMeterRechargeBatch();
+
+                string aa = DateTime.Now.DateToString();
+                WaterService w = new WaterService();
+                w.GetToken();
+                 //EleService sd = new EleService();
+                // sd.ElecMeterRechargeBatch();
                 // sd.readRemainMoney();
                 //startTime();
                 // string sql = "update wy_w_pay set MeterID=1 where GUID=1 ;update wy_w_pay set MeterID=2 where GUID=2 ;";
